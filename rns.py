@@ -32,10 +32,7 @@ class ComposedNumber:
     
 
     def __str__(self):
-        decomposition = ""
-        for i in range(len(self)):
-            decomposition += str(self[i]) + (" " if i != len(self) - 1 else "")
-        return "(" + decomposition + ")"
+        return str(tuple(self))
     
 
     def __len__(self):
@@ -54,6 +51,11 @@ class RNS:
                 decomposition[i] = num % e
             num = decomposition
         self._data = num
+    
+
+    def decode(self):
+        from sympy.ntheory.modular import crt
+        return crt(self._data._basis, list(self._data))[0]
     
 
     def __add__(self, other):
