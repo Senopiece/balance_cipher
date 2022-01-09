@@ -35,7 +35,7 @@ class ComposedNumber:
         decomposition = ""
         for i in range(len(self)):
             decomposition += str(self[i]) + (" " if i != len(self) - 1 else "")
-        return f"[raw: {self._data}], decomposition: ({decomposition})"
+        return "(" + decomposition + ")"
     
 
     def __len__(self):
@@ -64,6 +64,18 @@ class RNS:
 
         for i in range(len(self._data)):
             local_data[i] = (self._data[i] + other._data[i]) % self._data._basis[i]
+
+        return RNS(local_data)
+    
+
+    def __sub__(self, other):
+        assert isinstance(other, RNS)
+        assert self._data._basis == other._data._basis
+
+        local_data = ComposedNumber(self._data._basis)
+
+        for i in range(len(self._data)):
+            local_data[i] = (self._data[i] - other._data[i]) % self._data._basis[i]
 
         return RNS(local_data)
     
