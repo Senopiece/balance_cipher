@@ -5,6 +5,7 @@ class ComposedNumber:
 
 
     def __init__(self, basis):
+        assert isinstance(basis, tuple)
         self._data = 0
         self._basis = basis # <- final
 
@@ -32,16 +33,20 @@ class ComposedNumber:
 
     def __str__(self):
         decomposition = ""
-        for i in range(len(self._basis)):
-            decomposition += f"{self[i]}/{self._basis[i]}" + (" " if i != len(self._basis) - 1 else "")
+        for i in range(len(self)):
+            decomposition += str(self[i]) + (" " if i != len(self) - 1 else "")
         return f"[raw: {self._data}], decomposition: ({decomposition})"
+    
+
+    def __len__(self):
+        return len(self._basis)
 
 
 class RNS:
     _data : ComposedNumber = None
 
     def __init__(self, num, basis=None):
-        assert (isinstance(num, int) and isinstance(basis, list)) or (isinstance(num, ComposedNumber) and basis == None), \
+        assert (isinstance(num, int) and isinstance(basis, tuple)) or (isinstance(num, ComposedNumber) and basis == None), \
             "constructor parameter must be a integer to convert or a raw data (ComposedNumber)"
         if isinstance(num, int):
             decomposition = ComposedNumber(basis)
@@ -57,7 +62,7 @@ class RNS:
 
         local_data = ComposedNumber(self._data._basis)
 
-        for i in range(len(self._data._basis)):
+        for i in range(len(self._data)):
             local_data[i] = (self._data[i] + other._data[i]) % self._data._basis[i]
 
         return RNS(local_data)
@@ -69,7 +74,7 @@ class RNS:
 
         local_data = ComposedNumber(self._data._basis)
 
-        for i in range(len(self._data._basis)):
+        for i in range(len(self._data)):
             local_data[i] = (self._data[i] * other._data[i]) % self._data._basis[i]
 
         return RNS(local_data)
