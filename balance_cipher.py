@@ -1,4 +1,4 @@
-from f100pb_rns import f100pb_rns as RNS
+from f3t44pb_rns import f3t44pb_rns as RNS
 
 # sender secret
 balance1 = 454532
