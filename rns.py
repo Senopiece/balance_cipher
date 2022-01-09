@@ -31,10 +31,10 @@ class ComposedNumber:
     
 
     def __str__(self):
-        decomposition = []
+        decomposition = ""
         for i in range(len(self._basis)):
-            decomposition.append(self[i])
-        return f'[raw: {self._data}], decomposition: {tuple(decomposition)}'
+            decomposition += f"{self[i]}/{self._basis[i]}" + (" " if i != len(self._basis) - 1 else "")
+        return f"[raw: {self._data}], decomposition: ({decomposition})"
 
 
 class RNS:
