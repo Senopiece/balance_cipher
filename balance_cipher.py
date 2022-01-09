@@ -1,4 +1,18 @@
 from f3t44pb_rns import f3t44pb_rns as RNS
+import time
+
+# benchmarks
+seed = 967756765
+
+a = time.time()
+rns_number = RNS(seed)
+b = time.time()
+print("Time to encode from int to RNS: ", b - a)
+
+a = time.time()
+assert rns_number.decode() == seed
+b = time.time()
+print("Time to decode from RNS to int: ", b - a)
 
 # sender secret
 balance1 = 454532
@@ -31,6 +45,8 @@ cbn2 = M2*RNS(balance2 + 40)
 # 1) M1s and M2s exists
 # 2) M2s*(cb1 - cbn1)^2 == M1s*(cb2 - cbn2)^2
 
+a = time.time()
+
 d1 = cb1 - cbn1
 d2 = cb2 - cbn2
 
@@ -40,3 +56,7 @@ r = M1s*d2*d2
 print(f"l = {l}")
 print(f"r = {r}")
 print("l == r ✓" if l == r else "l != r")
+
+b = time.time()
+print("Time to verify: ", b - a)
+
