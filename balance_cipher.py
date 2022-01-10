@@ -42,16 +42,18 @@ balance1 = 60
 
 # sender open data (all the calculations are performed privately)
 M1 = 40858891157460307674354882010572547498271232277915032737235431902522015964929
+M1n = 1203174766785810276710872305903520022234420437434091757055991933319522845286
 cb1 = encode(M1*balance1)
-cb1n = encode(M1*(balance1 - 40))
+cb1n = encode(M1n*(balance1 - 40))
 
 # recipient secret
 balance2 = 3456
 
 # recipient open data (all the calculations are performed privately)
 M2 = 105378189937130164065839937598184558310536310992898322397669330185205034255393
+M2n = 71209169186837707306666995366925534503437113810227523981093294414235915606017
 cb2 = encode(M2*balance2)
-cb2n = encode(M2*(balance2 + 40))
+cb2n = encode(M2n*(balance2 + 40))
 
 # verification
 def is_positive(x, m):
@@ -63,8 +65,8 @@ def is_positive(x, m):
     return True
     
 
-l = add(mul(cb2n, M1), mul(cb1n, M2))
-r = add(mul(cb2, M1), mul(cb1, M2))
+l = mul(add(mul(cb2n, M1n), mul(cb1n, M2n)), M1*M2)
+r = mul(add(mul(cb2, M1), mul(cb1, M2)), M1n*M2n)
 
 
 print(f"sign: cb1n[{'+' if is_positive(cb1n, M1) else '-'}] cb2n[{'+' if is_positive(cb2n, M2) else '-'}] ")
