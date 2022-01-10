@@ -1,36 +1,29 @@
-from f3t44pb_rns import f3t44pb_rns as RNS
+from f100pb_rns import f100pb_rns as RNS
 import time
 
-# benchmarks
-seed = 967756765
-
-a = time.time()
-rns_number = RNS(seed)
-b = time.time()
-print("Time to encode from int to RNS: ", b - a)
-
-a = time.time()
-assert rns_number.decode() == seed
-b = time.time()
-print("Time to decode from RNS to int: ", b - a)
+# common open data
+mask = tuple(1 < n < 44 for n in range(100)) # mask from f100pb to f3t44pb
 
 # sender secret
 balance1 = 454532
-M1 = RNS(45677)
+M1 = RNS(456773424327589256738493263542374632787842342)
 
 # sender open data (all the calculations are performed privately)
-M1s = M1*M1
-cb1 = M1*RNS(balance1)
-cbn1 = M1*RNS(balance1 - 40)
+M1s = (M1*M1).mask(mask)
+cb1 = (M1*RNS(balance1)).mask(mask)
+cbn1 = (M1*RNS(balance1 - 40)).mask(mask)
+
+from math import sqrt
+print(cb1.decode() / sqrt(M1s.decode())) # <- the only way to hack (works only if M1 is less than multiple of f3t44pb)
 
 # recipient secret
 balance2 = 345654
-M2 = RNS(34325)
+M2 = RNS(343257245492657294437562934328998262378492489)
 
 # recipient open data (all the calculations are performed privately)
-M2s = M2*M2
-cb2 = M2*RNS(balance2)
-cbn2 = M2*RNS(balance2 + 40)
+M2s = (M2*M2).mask(mask)
+cb2 = (M2*RNS(balance2)).mask(mask)
+cbn2 = (M2*RNS(balance2 + 40)).mask(mask)
 
 # account registration procedure (usually comes with the first transaction)
 # 1) account owner sends its value Ms
@@ -58,5 +51,5 @@ print(f"r = {r}")
 print("l == r ✓" if l == r else "l != r")
 
 b = time.time()
-print("Time to verify: ", b - a)
+print("Verification time: ", b - a)
 

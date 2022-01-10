@@ -4,7 +4,7 @@ class ComposedNumber:
     _basis_mul = None
 
 
-    def __init__(self, basis):
+    def __init__(self, basis, data=None):
         assert isinstance(basis, tuple)
         self._data = 0
         self._basis = basis # <- final
@@ -14,6 +14,10 @@ class ComposedNumber:
         for e in basis:
             self._basis_mul.append(self._basis_mul[-1] * e)
         # self._basis_mul <- final
+
+        if data is not None:
+            assert isinstance(data, int)
+            self._data = data
 
 
     def __getitem__(self, i):
@@ -52,6 +56,39 @@ class RNS:
             num = decomposition
         self._data = num
     
+
+    def raw(self, mask=None):
+        if mask is not None:
+            assert all(isinstance(x, bool) for x in mask)
+            assert isinstance(mask, tuple)
+            assert len(mask) == len(self._data)
+
+            masked_basis = []
+            for i, e in enumerate(self._data._basis):
+                if mask[i]:
+                    masked_basis.append(e)
+            
+            masked_raw = ComposedNumber(tuple(masked_basis))
+
+            j = 0
+            for i in range(len(self._data)):
+                if mask[i]:
+                    masked_raw[j] = self._data[i]
+                    j += 1
+
+            return masked_raw
+            
+        else:
+            return self._data._data
+    
+
+    def mask(self, mask):
+        return RNS(self.raw(mask))
+    
+
+    def set_raw(self, new_raw):
+        self._data._data = new_raw
+
 
     def decode(self):
         from sympy.ntheory.modular import crt
