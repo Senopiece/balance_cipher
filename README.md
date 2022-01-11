@@ -29,6 +29,9 @@ Mn = RNS(some private key specific secret)
 ```
 So, this was the basics of the version 1.0.0, there still a lot of problems with not so strong decryption complexity and protocol nuances how to choose "some private key specific secret" etc...
 
+# Basics2
+I switched from rns to power and modulo arithmetic and modified the key concept, now it is persistent also for repeating balances. Also I have found interesting algebraic ring, it seems to be ultra hard to reverse, and now it only needs fast elemnts summation, element-scalar summation and element-scalar multiplication. According to the last remaining problem - underflow detection, I still have no idea on it.
+
 # Alternatives and motivation
 Yeah, I have heard about Zcash and zk-SNARKs and zk-STARK, it's a pretty technology, but that existence doesn't stop me from being thirsty to try to play with some another kind of encryption.
 
