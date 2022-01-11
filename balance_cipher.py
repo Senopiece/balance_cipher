@@ -3,7 +3,7 @@ module = 2**256
 
 def atomic_add(x, n):
     # where x is in the domain and n is just a scalar to add
-    return (pow(529, n, module))*x % module
+    return (pow(module-3, n, module))*x % module
 
 
 def encode(x):
