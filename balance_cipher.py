@@ -14,6 +14,7 @@ def encode(x):
 def decode(x):
     # where x is in the domain
     # NOTE: it is good here to be such slow
+    # NOTE: quantum computer can easily perform such algorithm, so there is another idea in new_algebraic_ring.py
     # TODO: check discrete log for this
     res = 0
     while x != 1:
@@ -58,18 +59,21 @@ cb2n = encode(M2n*(balance2 + 40))
 # verification
 def is_positive(x, m):
     neg = encode(-m)
-    for _ in range(1000):
+    for _ in range(10):
         if neg == x:
             return False
         neg = atomic_add(neg, -m)
     return True
     
-
 l = mul(add(mul(cb2n, M1n), mul(cb1n, M2n)), M1*M2)
 r = mul(add(mul(cb2, M1), mul(cb1, M2)), M1n*M2n)
 
 
-print(f"sign: cb1n[{'+' if is_positive(cb1n, M1) else '-'}] cb2n[{'+' if is_positive(cb2n, M2) else '-'}] ")
+print(f"sign: cb1n[{'+' if is_positive(cb1n, M1n) else '-'}] cb2n[{'+' if is_positive(cb2n, M2n) else '-'}] ")
 print(f"l = {l}")
 print(f"r = {r}")
 print("l == r ✓" if l == r else "l != r")
+
+print(-7 % 30)
+print((-7 % 30)**2 % 30)
+print((7)**2 % 30)
