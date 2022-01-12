@@ -16,8 +16,15 @@ class DiscreteExponent:
             self.data = pow(self.base, n, self.module)
     
 
-    def __add__(self, other):
+    def __eq__(self, other):
         assert isinstance(other, DiscreteExponent)
+        assert self.module == other.module
+        assert self.origin == other.origin
+        assert self.base == other.base
+        return other.data == self.data
+    
+
+    def __add__(self, other):
         self == other # assert
         res = deepcopy(self)
         res.data = (self.data * other.data) % self.module
@@ -25,7 +32,6 @@ class DiscreteExponent:
     
 
     def __sub__(self, other):
-        assert isinstance(other, DiscreteExponent)
         self == other # assert
         res = deepcopy(self)
         res.data = (self.data * pow(other.data, -1, self.module)) % self.module
@@ -37,14 +43,6 @@ class DiscreteExponent:
         res = deepcopy(self)
         res.data = pow(self.data, n, self.module)
         return res
-    
-
-    def __eq__(self, other):
-        assert isinstance(other, DiscreteExponent)
-        assert self.module == other.module
-        assert self.origin == other.origin
-        assert self.base == other.base
-        return other.data == self.data
     
 
     def __str__(self):
