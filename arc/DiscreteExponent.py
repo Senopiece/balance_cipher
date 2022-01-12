@@ -2,11 +2,13 @@ from copy import deepcopy
 
 
 class DiscreteExponent:
-    def __init__(self, o, m, n=None):
+    def __init__(self, o, b, m, n=None):
         assert isinstance(m, int)
+        assert isinstance(b, int)
         assert isinstance(o, int)
 
         self.module = m
+        self.base = b
         self.origin = o
 
         if n is not None:
@@ -20,10 +22,10 @@ class DiscreteExponent:
         res = deepcopy(self)
 
         if isinstance(other, int):
-            res.data = (pow(self.module-3, other, self.module))*self.data % self.module
+            # works like this + DiscreteExponent(other)
+            res.data = (pow(self.base, other, self.module))*self.data % self.module
         elif isinstance(other, DiscreteExponent):
-            assert self.module == other.module
-            assert self.origin == other.origin
+            self == other # assert
             res.data = (self.data * other.data) % self.module
         
         return res
@@ -34,10 +36,9 @@ class DiscreteExponent:
         res = deepcopy(self)
 
         if isinstance(other, int):
-            res.data = (pow(self.module-3, -other, self.module))*self.data % self.module
+            res.data = (pow(self.base, -other, self.module))*self.data % self.module
         elif isinstance(other, DiscreteExponent):
-            assert self.module == other.module
-            assert self.origin == other.origin
+            self == other # assert
             res.data = (self.data * pow(other.data, -1, self.module)) % self.module
         
         return res
@@ -54,6 +55,7 @@ class DiscreteExponent:
         assert isinstance(other, DiscreteExponent)
         assert self.module == other.module
         assert self.origin == other.origin
+        assert self.base == other.base
         return other.data == self.data
     
 
