@@ -13,34 +13,22 @@ class DiscreteExponent:
 
         if n is not None:
             assert isinstance(n, int)
-            self.data = o
-            self.data = (self + n).data
+            self.data = pow(self.base, n, self.module)
     
 
     def __add__(self, other):
-        assert isinstance(other, DiscreteExponent) or isinstance(other, int)
+        assert isinstance(other, DiscreteExponent)
+        self == other # assert
         res = deepcopy(self)
-
-        if isinstance(other, int):
-            # works like this + DiscreteExponent(other)
-            res.data = (pow(self.base, other, self.module))*self.data % self.module
-        elif isinstance(other, DiscreteExponent):
-            self == other # assert
-            res.data = (self.data * other.data) % self.module
-        
+        res.data = (self.data * other.data) % self.module
         return res
     
 
     def __sub__(self, other):
-        assert isinstance(other, DiscreteExponent) or isinstance(other, int)
+        assert isinstance(other, DiscreteExponent)
+        self == other # assert
         res = deepcopy(self)
-
-        if isinstance(other, int):
-            res.data = (pow(self.base, -other, self.module))*self.data % self.module
-        elif isinstance(other, DiscreteExponent):
-            self == other # assert
-            res.data = (self.data * pow(other.data, -1, self.module)) % self.module
-        
+        res.data = (self.data * pow(other.data, -1, self.module)) % self.module
         return res
     
 
