@@ -1,26 +1,41 @@
-from ars.de1m256 import encode 
+from ars.de1m2_256 import encode as encode
+from comparison_proofs import make_proof, verify_proof, fake_proof
 
 # sender secret
-balance1 = 60
+balance1 = 57
+#origin1 = 567
+#priv_key1 = origin1*2 # TODO: use origin to hide when balance reaches zero (and make balance reverse bruteforce even impossible)
 
 # sender open data (all the calculations are performed privately)
-# TODO: m*b % 2**254 is having unique solution for b only if m is odd, is it good or bad?
-m1 = 61831996350531240199057085283232358026495125261252625916218455899905125740353
-m2 = 77347096829997860251145238741378512327304242939718028116032409255917948845697
-A1 = encode(m1*balance1)
+m1 = 2344
+m2 = 3232
+A1 = encode(m1*(balance1))
 A2 = encode(m2*(balance1 - 40))
+A2proof128 = make_proof(2**128, m2*(balance1 - 40))
+A2proof0 = make_proof(m2*(balance1 - 40), 0)
 
 # recipient secret
-balance2 = 3456
+balance2 = 34
+#origin2 = 4353
+#priv_key2 = origin2*2
 
 # recipient open data (all the calculations are performed privately)
-g1 = 42334496918515581520281029467747373373690656937939313516048188657552755383937
-g2 = 97680493710316016549179486752524137080160327319815402918319565371107429039937
-B1 = encode(g1*balance2)
+g1 = 4233
+g2 = 9768
+B1 = encode(g1*(balance2))
 B2 = encode(g2*(balance2 + 40))
+B2proof128 = make_proof(2**128, g2*(balance2 + 40))
+B2proof0 = make_proof(g2*(balance2 + 40), 0)
+
 
 # verification
-# TODO: underflow detection
+M = encode(2**128)
+M0 = encode(0)
+print("B2 < 2**128 ✓" if verify_proof(M, B2, B2proof128) else "B2 < 2**128 was not proved")
+print("A2 < 2**128 ✓" if verify_proof(M, A2, A2proof128) else "A2 < 2**128 was not proved")
+print("B2 > 0 ✓" if verify_proof(B2, M0, B2proof0) else "B2 > 0 was not proved")
+print("A2 > 0 ✓" if verify_proof(A2, M0, A2proof0) else "A2 > 0 was not proved")
+
 l = (B2*m2 + A2*g2)*m1*g1
 r = (B1*m1 + A1*g1)*m2*g2
 

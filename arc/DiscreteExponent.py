@@ -1,6 +1,7 @@
 from copy import deepcopy
 
 
+# TODO: metaclass
 class DiscreteExponent:
     def __init__(self, o, b, m, n=None):
         assert isinstance(m, int)
@@ -13,7 +14,7 @@ class DiscreteExponent:
 
         if n is not None:
             assert isinstance(n, int)
-            self.data = pow(self.base, n, self.module)
+            self.data = self.origin*pow(self.base, n, self.module)
     
 
     def __eq__(self, other):
