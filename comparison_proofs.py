@@ -4,9 +4,11 @@ import random
 
 
 def make_proof(a, b):
-    # make a proof that Ga > Gb, knowing a and b
+    # make a proof that Ga > Gb > 0, knowing a and b
     random.seed(a*b)
-    c = random.randint(0, abs(a-b)-1)
+    c = random.randint(1, min(a-b-1, b-1)) # TODO: gaussian random
+
+    # proof for a > b
     l = lcm(a+c, b+2*c)
     k1 = l // (a+c)
     k2 = l // (b+2*c)
@@ -14,20 +16,35 @@ def make_proof(a, b):
     #assert 0 < k1 < k2, "May occur if you use negative numbers"
     if k2-k1 == a-b:
         print(f"WARNING: too week proof for {a} > {b}")
-    return k1, k2, encode(c)
+
+    # proof for b > 0
+    l = lcm(b+c, 2*c)
+    k3 = l // (b+c)
+    k4 = l // (2*c)
+
+    return k1, k2, k3, k4, encode(c)
 
 
 
 def fake_proof(a, b):
-    # works sometimes, but with k2 < 2**160 chances of creating a fake proof became insufficient
-    return make_proof(2**254-a, b)
+    assert a > b # the actual make_proof is working with assert a > b > 0, this fake tries to down zero
+    while True:
+        a += 2**254
+        b += 2**254
+        r = make_proof(a, b)
+        if verify_proof(encode(a), encode(b), r):
+            return r
 
 
 def verify_proof(Ga, Gb, proof):
-    # verify a proof that Ga > Gb
+    # verify a proof that Ga > Gb > 0
     # TODO: make sure that we cannot extract b (even knowing a) from this proof
-    k1, k2, Gc = proof
-    return (Ga + Gc)*k1 == (Gb + Gc*2)*k2 and 0 < k1 < k2 < 2**160
+    k1, k2, k3, k4, Gc = proof
+    return \
+        (Ga + Gc)*k1 == (Gb + Gc*2)*k2 and \
+        (Gb + Gc)*k3 == Gc*2*k4 and \
+        0 < k1 < k2 < 2**160 and \
+        0 < k3 < k4 < 2**160
 
 
 # a = 2**128
