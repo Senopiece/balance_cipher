@@ -29,7 +29,6 @@ B2 = encode(B2)
 
 # verification
 M = encode(2**128)
-M0 = encode(0)
 print("B2 < 2^128 ✓" if verify_proof(M, B2, B2proof) else "FATAL: B2 < 2^128 has an incorrect proof")
 print("A2 < 2^128 ✓" if verify_proof(M, A2, A2proof) else "FATAL: A2 < 2^128 has an incorrect proof")
 
