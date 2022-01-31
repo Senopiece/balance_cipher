@@ -36,8 +36,8 @@ def verify_proof(Ga, Gb, proof):
     return \
         (Ga + Gc)*k1 == (Gb + Gc*2)*k2 and \
         (Gb + Gc)*k3 == Gc*2*k4 and \
-        0 < k1 < k2 < 2**253 and \
-        0 < k3 < k4 < 2**253
+        0 < k1 < k2 < 2**250 and \
+        0 < k3 < k4 < 2**250
 
 
 a = 2**128
