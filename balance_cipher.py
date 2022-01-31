@@ -4,6 +4,8 @@ from comparison_proofs import make_proof, verify_proof
 # I realized that origins does not prevent from bruteforce
 # balance restore, so plz TODO
 
+# TODO: gcd everywhere
+
 # ----------------------------------------------------------------- #
 #                     S E N D E R  S E C R E T                      #
 # ----------------------------------------------------------------- #
