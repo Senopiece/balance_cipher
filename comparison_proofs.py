@@ -57,6 +57,7 @@ def verify_proof(Ga, Gb, proof):
         0 < k3 < k4 < 2**250
 
 
+print(2**180)
 # a = 525225
 # b = 32235
 # print(make_proof(a, b))
