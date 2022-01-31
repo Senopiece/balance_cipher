@@ -10,7 +10,7 @@ def bettavariate_randint(start, stop):
 
 def make_proof(a, b, c):
     # make a proof that Ga > Gb > Gc
-    assert a > b > c > 0
+    assert a > b > c >= 0
 
     random.seed(a*b*c)
     d = bettavariate_randint(
