@@ -3,65 +3,49 @@ from math import gcd
 import random
 
 
-def make_proof(a, b):
-    # make a proof that Ga > Gb > 0, knowing a and b
-    random.seed(a*b)
-    c = int(random.betavariate(2, 2)*min(a-b-1, b-1))
+def bettavariate_randint(start, stop):
+    assert stop > start
+    return int(random.betavariate(2, 2)*(stop - start) + start)
+
+
+def make_proof(a, b, c):
+    # make a proof that Ga > Gb > Gc
+    assert a > b > c > 0
+
+    random.seed(a*b*c)
+    d = bettavariate_randint(
+        start = max(-c//2, -b//2),
+        stop = min(a-b, b-c)
+    )
 
     # proof for a > b
-    g = gcd(a+c, b+2*c)
-    k1 = (b+2*c) // g
-    k2 = (a+c) // g
+    g = gcd(a+d, b+2*d)
+    k1 = (b+2*d) // g
+    k2 = (a+d) // g
 
     # proof for b > 0
-    g = gcd(b+c, 2*c)
-    k3 = (2*c) // g
-    k4 = (b+c) // g
+    g = gcd(b+d, c+2*d)
+    k3 = (c+2*d) // g
+    k4 = (b+d) // g
 
-    return k1, k2, k3, k4, encode(c)
-
-
-
-def fake_proof(a, b):
-    # TODO: continue trying to fake a proof
-    # make a proof that Ga > Gb > 0, knowing a and b, but actually a < b
-    random.seed(a*b)
-    Ga = encode(a)
-    Gb = encode(b)
-    while True:
-        c = random.randint(a-b, 0)
-
-        # proof for a > b
-        g = gcd(a+c, b+2*c)
-        k1 = (b+2*c) // g
-        k2 = (a+c) // g
-
-        # proof for b > 0
-        g = gcd(b+c, 2*c)
-        k3 = (2*c) // g
-        k4 = (b+c) // g
-
-        proof = (k1, k2, k3, k4, encode(c))
-        if verify_proof(Ga, Gb, proof):
-            return proof
+    return k1, k2, k3, k4, encode(d)
 
 
-def verify_proof(Ga, Gb, proof):
-    # verify a proof that Ga > Gb > 0
+def verify_proof(Ga, Gb, Gc, proof):
+    # verify a proof that Ga > Gb > Gc
     # TODO: make sure that we cannot extract b (even knowing a) from this proof
-    k1, k2, k3, k4, Gc = proof
+    k1, k2, k3, k4, Gd = proof
     return \
-        (Ga + Gc)*k1 == (Gb + Gc*2)*k2 and \
-        (Gb + Gc)*k3 == Gc*2*k4 and \
-        0 < k1 < k2 < 2**250 and \
-        0 < k3 < k4 < 2**250
+        (Ga + Gd)*k1 == (Gb + Gd*2)*k2 and \
+        (Gb + Gd)*k3 == (Gc + Gd*2)*k4 and \
+        k1 < k2 and k3 < k4
 
 
-print(2**180)
-# a = 525225
-# b = 32235
-# print(make_proof(a, b))
-# print(verify_proof(encode(a), encode(b), make_proof(a, b)))
+# a = 23543546456543
+# b = a-1
+# c = b-1
+# print(make_proof(a, b, c))
+# print(verify_proof(encode(a), encode(b), encode(c), make_proof(a, b, c)))
 
 # a, b = b, a
 # print(fake_proof(a, b))
