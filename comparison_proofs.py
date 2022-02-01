@@ -12,7 +12,7 @@ def make_proof(a, b, c):
     # make a proof that Ga > Gb > Gc
     assert a > b > c >= 0
 
-    random.seed(a*b*c)
+    random.seed(a*2**508 + b*2**254 + c)
     d = bettavariate_randint(
         start = max(-c//2, -b//2),
         stop = min(a-b, b-c)
