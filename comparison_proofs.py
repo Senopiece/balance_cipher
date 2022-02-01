@@ -33,7 +33,7 @@ def make_proof(a, b, c):
 
 def verify_proof(Ga, Gb, Gc, proof):
     # verify a proof that Ga > Gb > Gc
-    # TODO: make sure that we cannot extract b (even knowing a) from this proof
+    # TODO: make sure that we cannot extract b (even knowing a and c) from this proof
     k1, k2, k3, k4, Gd = proof
     return \
         (Ga + Gd)*k1 == (Gb + Gd*2)*k2 and \
@@ -41,12 +41,8 @@ def verify_proof(Ga, Gb, Gc, proof):
         k1 < k2 and k3 < k4
 
 
-# a = 23543546456543
-# b = a-1
-# c = b-1
-# print(make_proof(a, b, c))
-# print(verify_proof(encode(a), encode(b), encode(c), make_proof(a, b, c)))
-
-# a, b = b, a
-# print(fake_proof(a, b))
-# print(verify_proof(encode(a), encode(b), fake_proof(a, b)))
+a = 345435454356
+b = 34543545435
+c = 56
+print(make_proof(a, b, c))
+print(verify_proof(encode(a), encode(b), encode(c), make_proof(a, b, c)))
