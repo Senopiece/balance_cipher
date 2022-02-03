@@ -14,7 +14,7 @@ A1 = encode(m1*balance1)
 # sender open data (all the calculations are performed privately)
 m2 = 3232 # open constant
 A2 = balance1 - 40
-A2proof = make_proof(2**253, m2*A2, 0)
+A2proof = make_proof(2**253, m2*A2, 0) # TODO: make it safe
 A2 = encode(m2*A2)
 
 # ====================================================== #
