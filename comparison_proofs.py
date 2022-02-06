@@ -13,7 +13,7 @@ def make_proof(a, b, c):
 
     random.seed(a*2**508 + b*2**254 + c)
     d = bettavariate_randint(
-        start = max((-c//3)+1, (-b//2)+1),
+        start = max(-c//3, -b//2),
         stop = min(a-b, b-c)
     )
 
@@ -31,8 +31,33 @@ def verify_proof(Ga, Gb, Gc, proof):
         k1 > k2 > k3
 
 
-a = 345435454356234234
-b = 345435454
-c = 561324
-print(make_proof(a, b, c))
-print(verify_proof(encode(a), encode(b), encode(c), make_proof(a, b, c)))
+def make_proof2(a, b, c):
+    # make a proof that Ga > Gb > Gc, considering a case when proof verificator know a
+    assert a > b > c >= 0
+
+    random.seed(a*2**508 + b*2**254 + c)
+    d = bettavariate_randint(
+        start = max(-c//3, -b//2),
+        stop = min(a-b, b-c)
+    )
+
+    return b + d, c + 2*d
+
+
+def verify_proof2(a, Gb, Gc, proof):
+    # verify a proof that Ga > Gb > Gc
+    # NOTE: this proof is persistent until we dont know b, c and d
+    k1, k2 = proof
+    Ga = encode(a)
+    Gd = encode(k1) - Gb
+    return \
+        Ga*k1 == (Gb + Gd)*a and \
+        (Gb + Gd)*k2 == (Gc + Gd*2)*k1 and \
+        a > k1 > k2
+
+
+a = 999999999999999234
+b = 3454999999999998
+c = 56234234
+print(make_proof2(a, b, c))
+print(verify_proof2(a, encode(b), encode(c), make_proof2(a, b, c)))
